@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Características Habilitadas</title>
+</head>
+<body>
+    <h1>Características del Producto Compilado</h1>
+    <ul>
+        <li th:each="description : ${featureDescriptions}" th:text="${description}">Característica no encontrada</li>
+    </ul>
+</body>
+</html>

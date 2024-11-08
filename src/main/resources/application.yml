@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false  # Desactiva la página de error por defecto
+  tomcat:
+    max-http-header-size: 8192  # Ajusta el tamaño máximo del encabezado HTTP si es necesario
+    connection-timeout: 20000   # Tiempo máximo para mantener una conexión abierta (en milisegundos)
+
+spring:
+  thymeleaf:
+    cache: false  # Desactivar el caché durante el desarrollo para ver los cambios instantáneamente
+  profiles:
+    active: dev   # Configuración de perfil (por defecto, se activa el perfil de desarrollo)
+
+logging:
+  level:
+    root: DEBUG
+    com.velocity: DEBUG  # Nivel de logging para nuestro paquete principal
+
+app:
+  features-config: C:/Users/ljpca/Downloads/LPS/velo-city-product-line/src/main/resources/features-config-puntobike.xml
