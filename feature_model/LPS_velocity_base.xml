@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendposition" value="867,16"/>
+		<graphics key="legendautolayout" value="false"/>
+		<graphics key="showconstraints" value="true"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="vertical"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="4"/>
+	</properties>
+	<struct>
+		<and abstract="true" mandatory="true" name="VeloCity">
+			<alt mandatory="true" name="Linea">
+				<feature name="Vamos en Bici"/>
+				<feature name="Punto Bike"/>
+				<feature name="Training Hub"/>
+			</alt>
+			<and mandatory="true" name="Registro y gestión de usuarios">
+				<feature mandatory="true" name="Registro de ciclistas"/>
+				<feature mandatory="true" name="Perfiles de usuario"/>
+				<feature name="Gestión de membrerías"/>
+				<feature name="Gestión de clubes"/>
+				<feature name="Gestión de planes de entrenamientos"/>
+				<feature mandatory="true" name="Gestión de roles"/>
+			</and>
+			<and name="Gestión de bibicletas">
+				<feature name="Registro de bibicletas"/>
+				<feature name="Sistema de alquiler"/>
+				<feature name="Mantenimiento y reparación"/>
+			</and>
+			<and mandatory="true" name="Planificación y gestión de eventos">
+				<graphics key="collapsed" value="false"/>
+				<feature mandatory="true" name="Creación de eventos"/>
+				<feature name="Planificación de rutas"/>
+				<feature name="Gestión de competidores"/>
+			</and>
+			<and name="Características sociales">
+				<feature name="Red social integrada"/>
+				<feature name="Compartir rutas y logros"/>
+				<feature name="Foros de discusión"/>
+			</and>
+			<and mandatory="true" name="Análisis y reportes">
+				<feature mandatory="true" name="Estadísticas de uso"/>
+				<feature name="Reportes gubernamentales"/>
+				<feature name="Análisis de rendimiento de ciclistas"/>
+				<feature mandatory="true" name="Registro de ruta/entrenamiento"/>
+			</and>
+			<and mandatory="true" name="Servicios complementarios">
+				<feature mandatory="true" name="Servicios de terceros"/>
+			</and>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<imp>
+				<var>Vamos en Bici</var>
+				<conj>
+					<var>Registro de ruta/entrenamiento</var>
+					<conj>
+						<var>Registro de ciclistas</var>
+						<conj>
+							<var>Perfiles de usuario</var>
+							<conj>
+								<var>Gestión de membrerías</var>
+								<conj>
+									<var>Gestión de roles</var>
+									<conj>
+										<var>Registro de bibicletas</var>
+										<conj>
+											<var>Creación de eventos</var>
+											<conj>
+												<var>Planificación de rutas</var>
+												<conj>
+													<var>Compartir rutas y logros</var>
+													<conj>
+														<var>Estadísticas de uso</var>
+														<conj>
+															<var>Reportes gubernamentales</var>
+															<var>Servicios de terceros</var>
+														</conj>
+													</conj>
+												</conj>
+											</conj>
+										</conj>
+									</conj>
+								</conj>
+							</conj>
+						</conj>
+					</conj>
+				</conj>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>Punto Bike</var>
+				<conj>
+					<var>Registro de ciclistas</var>
+					<conj>
+						<var>Perfiles de usuario</var>
+						<conj>
+							<var>Gestión de clubes</var>
+							<conj>
+								<var>Gestión de planes de entrenamientos</var>
+								<conj>
+									<var>Gestión de roles</var>
+									<conj>
+										<var>Registro de bibicletas</var>
+										<conj>
+											<var>Sistema de alquiler</var>
+											<conj>
+												<var>Mantenimiento y reparación</var>
+												<conj>
+													<var>Creación de eventos</var>
+													<conj>
+														<var>Estadísticas de uso</var>
+														<conj>
+															<var>Registro de ruta/entrenamiento</var>
+															<var>Servicios de terceros</var>
+														</conj>
+													</conj>
+												</conj>
+											</conj>
+										</conj>
+									</conj>
+								</conj>
+							</conj>
+						</conj>
+					</conj>
+				</conj>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>Training Hub</var>
+				<conj>
+					<var>Registro de ciclistas</var>
+					<conj>
+						<var>Perfiles de usuario</var>
+						<conj>
+							<var>Gestión de membrerías</var>
+							<conj>
+								<var>Gestión de clubes</var>
+								<conj>
+									<var>Gestión de planes de entrenamientos</var>
+									<conj>
+										<var>Gestión de roles</var>
+										<conj>
+											<var>Creación de eventos</var>
+											<conj>
+												<var>Planificación de rutas</var>
+												<conj>
+													<var>Gestión de competidores</var>
+													<conj>
+														<var>Red social integrada</var>
+														<conj>
+															<var>Compartir rutas y logros</var>
+															<conj>
+																<var>Foros de discusión</var>
+																<conj>
+																	<var>Estadísticas de uso</var>
+																	<conj>
+																		<var>Registro de ruta/entrenamiento</var>
+																		<conj>
+																			<var>Análisis de rendimiento de ciclistas</var>
+																			<var>Servicios de terceros</var>
+																		</conj>
+																	</conj>
+																</conj>
+															</conj>
+														</conj>
+													</conj>
+												</conj>
+											</conj>
+										</conj>
+									</conj>
+								</conj>
+							</conj>
+						</conj>
+					</conj>
+				</conj>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>
