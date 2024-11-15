@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registro de Usuario y Bicicleta</title>
+</head>
+<body>
+    <h1>Registrar Usuario y Bicicleta</h1>
+    <form action="/register" method="post">
+        <label for="userName">Nombre del Usuario:</label>
+        <input type="text" id="userName" name="userName" required><br><br>
+        
+        <label for="bikeName">Nombre de la Bicicleta:</label>
+        <input type="text" id="bikeName" name="bikeName" required><br><br>
+        
+        <button type="submit">Registrar</button>
+    </form>
+    <p th:text="${message}"></p>
+
+    <div th:if="${serviciosTercerosEnabled}">
+        <a href="/serviciosTerceros">Ir a Servicios de Terceros</a>
+    </div>
+
+    <div th:if="${gestionClubesEnabled}">
+        <a href="/gestionClubes">Ir a Gestión de Clubes</a>
+    </div>
+
+    <div th:if="${gestionAlquilerEnabled}">
+        <a href="/gestionAlquiler">Ir a Gestión de Alquiler de Bicicletas</a>
+    </div>
+</body>
+</html>
