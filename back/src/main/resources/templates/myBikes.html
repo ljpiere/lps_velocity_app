@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar Alquiler de Bicicletas</title>
+    <title>Mis Bicicletas</title>
 </head>
 <body>
-    <h1>Alquilar Bicicleta</h1>
+    <h1>Mis Bicicletas</h1>
 
     <div th:if="${bikes != null && !bikes.isEmpty()}">
         <table border="1">
@@ -14,26 +14,19 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Marca</th>
-                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="bike : ${bikes}">
                     <td th:text="${bike.name}"></td>
                     <td th:text="${bike.brand}"></td>
-                    <td>
-                        <form action="/alquilarBicicleta" method="post">
-                            <input type="hidden" name="bikeId" th:value="${bike.id}">
-                            <button type="submit">Alquilar</button>
-                        </form>
-                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <div th:if="${bikes == null || bikes.isEmpty()}">
-        <p>No tienes bicicletas disponibles para alquilar.</p>
+        <p>No tienes bicicletas registradas.</p>
     </div>
 
     <p><a href="/">Volver a la página principal</a></p>

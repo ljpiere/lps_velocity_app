@@ -1,31 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Registro de Usuario y Bicicleta</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
 </head>
 <body>
-    <h1>Registrar Usuario y Bicicleta</h1>
-    <form action="/register" method="post">
-        <label for="userName">Nombre del Usuario:</label>
-        <input type="text" id="userName" name="userName" required><br><br>
-        
-        <label for="bikeName">Nombre de la Bicicleta:</label>
-        <input type="text" id="bikeName" name="bikeName" required><br><br>
-        
-        <button type="submit">Registrar</button>
-    </form>
-    <p th:text="${message}"></p>
+    <h1>Bienvenido a Velocity</h1>
 
-    <div th:if="${serviciosTercerosEnabled}">
-        <a href="/serviciosTerceros">Ir a Servicios de Terceros</a>
+    <!-- Mostrar si el usuario no está autenticado -->
+    <div sec:authorize="!isAuthenticated()">
+        <p>Por favor, <a href="/login">inicia sesión</a> o <a href="/register">regístrate</a>.</p>
     </div>
 
-    <div th:if="${gestionClubesEnabled}">
-        <a href="/gestionClubes">Ir a Gestión de Clubes</a>
-    </div>
-
-    <div th:if="${gestionAlquilerEnabled}">
-        <a href="/gestionAlquiler">Ir a Gestión de Alquiler de Bicicletas</a>
+    <!-- Mostrar si el usuario está autenticado -->
+    <div sec:authorize="isAuthenticated()">
+        <p>Hola, <span sec:authentication="name"></span>!</p>
+        <ul>
+            <li><a href="/registerBike">Registrar Bicicleta</a></li>
+            <li><a href="/myBikes">Ver Mis Bicicletas</a></li>
+            <li><a href="/gestionAlquiler">Alquilar Bicicleta</a></li>
+            <li><a href="/logout">Cerrar sesión</a></li>
+        </ul>
     </div>
 </body>
 </html>
