@@ -59,7 +59,7 @@ public class BackController {
     public String index(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
         model.addAttribute("message", "");
         model.addAttribute("serviciosTercerosEnabled", serviciosTercerosEnabled);
@@ -74,7 +74,7 @@ public class BackController {
         if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
             return "redirect:/";
         }
-        return "login";
+        return "auth/login";
     }
 
     @PostMapping("/login")
@@ -87,7 +87,7 @@ public class BackController {
             return "redirect:/";
         } catch (Exception e) {
             model.addAttribute("message", "Nombre de usuario o contraseña incorrectos.");
-            return "login";
+            return "auth/login";
         }
     }
 
@@ -97,7 +97,7 @@ public class BackController {
         if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
             return "redirect:/";
         }
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
@@ -109,23 +109,23 @@ public class BackController {
         userRepository.save(nuser);  // Guardar usuario en la base de datos
 
         model.addAttribute("message", "Usuario registrado exitosamente. Ahora puedes iniciar sesión.");
-        return "login";
+        return "auth/login";
     }
 
     @GetMapping("/registerBike")
     public String registerBikeForm(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
-        return "registerBike";
+        return "bike/registerBike";
     }
 
     @PostMapping("/registerBike")
     public String registerBike(@RequestParam String bikeName, @RequestParam String bikeBrand, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
 
         String username = authentication.getName();
@@ -133,7 +133,7 @@ public class BackController {
 
         if (user == null) {
             model.addAttribute("message", "Usuario no encontrado.");
-            return "registerBike";
+            return "bike/registerBike";
         }
 
         Bike bike = new Bike();
@@ -144,7 +144,7 @@ public class BackController {
         bikeRepository.save(bike);
 
         model.addAttribute("message", "Bicicleta registrada exitosamente.");
-        return "redirect:/myBikes";
+        return "redirect:/bike/myBikes";
     }
 
 
@@ -152,7 +152,7 @@ public class BackController {
     public String myBikes(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
 
         String username = authentication.getName();
@@ -165,32 +165,32 @@ public class BackController {
 
         List<Bike> bikes = bikeRepository.findByOwner(user);
         model.addAttribute("bikes", bikes);
-        return "myBikes";
+        return "bike/myBikes";
     }
 
     @GetMapping("/serviciosTerceros")
     public String serviciosTerceros(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
-        return "serviciosTerceros";
+        return "features/serviciosTerceros";
     }
 
     @GetMapping("/gestionClubes")
     public String gestionClubes(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
-        return "gestionClubes";
+        return "features/gestionClubes";
     }
 
     @PostMapping("/inscribirClub")
     public String inscribirClub(@RequestParam Long userId, @RequestParam String clubName, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
 
         if (gestionClubes != null) {
@@ -199,14 +199,14 @@ public class BackController {
         } else {
             model.addAttribute("message", "La funcionalidad de gestión de clubes no está habilitada.");
         }
-        return "gestionClubes";
+        return "features/gestionClubes";
     }
 
     @GetMapping("/gestionAlquiler")
     public String gestionAlquiler(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
 
         String username = authentication.getName();
@@ -214,12 +214,12 @@ public class BackController {
 
         if (user == null) {
             model.addAttribute("message", "Usuario no encontrado.");
-            return "gestionAlquiler";
+            return "alquiler/gestionAlquiler";
         }
 
         List<Bike> bikes = bikeRepository.findByOwner(user);
         model.addAttribute("bikes", bikes);
-        return "gestionAlquiler";
+        return "alquiler/gestionAlquiler";
     }
 
     @PostMapping("/alquilarBicicleta")
@@ -227,7 +227,7 @@ public class BackController {
         // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
 
         String username = authentication.getName();
@@ -235,14 +235,14 @@ public class BackController {
 
         if (user == null) {
             model.addAttribute("message", "Usuario no encontrado.");
-            return "gestionAlquiler";
+            return "alquiler/gestionAlquiler";
         }
 
         // Validar si la bicicleta existe
         Optional<Bike> bikeOptional = bikeRepository.findById(bikeId);
         if (bikeOptional.isEmpty()) {
             model.addAttribute("message", "Bicicleta no encontrada. Por favor, selecciona una bicicleta válida.");
-            return "gestionAlquiler";
+            return "alquiler/gestionAlquiler";
         }
 
         // Verificar si la funcionalidad de alquiler está habilitada
@@ -253,7 +253,7 @@ public class BackController {
             model.addAttribute("message", "La funcionalidad de gestión de alquiler no está habilitada.");
         }
         
-        return "gestionAlquiler";
+        return "alquiler/gestionAlquiler";
     }
 
     @Autowired

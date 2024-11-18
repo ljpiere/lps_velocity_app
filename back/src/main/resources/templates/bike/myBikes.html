@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Bicicletas</title>
+</head>
+<body>
+    <h1>Mis Bicicletas</h1>
+
+    <div th:if="${bikes != null && !bikes.isEmpty()}">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="bike : ${bikes}">
+                    <td th:text="${bike.name}"></td>
+                    <td th:text="${bike.brand}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${bikes == null || bikes.isEmpty()}">
+        <p>No tienes bicicletas registradas.</p>
+    </div>
+
+    <p><a href="/">Volver a la página principal</a></p>
+</body>
+</html>
