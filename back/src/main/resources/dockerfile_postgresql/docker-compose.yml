@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  database:
+    image: postgres:9.6
+    ports:
+     - "5432:5432"
+    environment: 
+     - POSTGRES_USER=arq
+     - POSTGRES_DB=bd
+     - POSTGRES_PASSWORD=password
+    volumes:
+     - ./db/:/var/lib/postgresql/data
+    healthcheck:
+      interval: 5s
+      timeout: 30s
+      retries: 10     
