@@ -39,6 +39,8 @@ Velocity es una aplicación web diseñada para gestionar las actividades relacio
 El proyecto está organizado en los siguientes módulos:
 
 ### Backend (`src/main/java/com/velocity/back`)
+En la carpeta `back` encontrarás unn README.md con la explicación del código y cómo está construida la aplicación:
+
 - **moduloRegistro**: Gestiona el registro de ciclistas, clubes y alquiler de bicicletas.
 - **moduloBicicleta**: Maneja la administración de bicicletas y alquileres.
 - **moduloEstadistica**: Módulo para estadísticas de uso y generación de reportes.
@@ -102,21 +104,31 @@ Para desplegar la aplicación localmente:
    ```sh
    git clone https://github.com/tuusuario/velocity.git
    ```
+2. Ejecuta un contenedor de Docker utilizando el archivo de configuracion en la carpeta dockerfile_postgresql disponible en el repositorio.
 
-2. **Compilar y Ejecutar la Aplicación**:
+3. Revisa el archivo `aplication.properties` para validar los atributos de configuración de tu imagen de Docker. Revisa las features disponibles.
+
+4. **Compilar y Ejecutar la Aplicación**: En una terminal, sobre la carpeta `back` donde se encuentra el archivo `pom.xml` ejecuta la aplicación:
 
    ```sh
    mvn clean package
    mvn spring-boot:run
    ```
 
-3. **Acceder a la Aplicación**:
+O puedes probar con: 
+
+   ```sh
+   mvn clean package
+   mvn spring-boot:run
+   ```
+5. **Acceder a la Aplicación**:
 
    Abre tu navegador en `http://localhost:8080`.
 
 ## Despliegue en Azure
 
 ### Preparación de la Imagen Docker
+La imagen de docker está disponible en: https://hub.docker.com/repository/docker/jeanpierec/velocity_full/general
 
 1. **Construir la Imagen**:
 
