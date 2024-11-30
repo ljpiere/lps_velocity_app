@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #2c3e50, #3498db);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-shadow: 2px 2px #34495e;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #f1c40f;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #e74c3c;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        ul li {
+            margin: 10px 0;
+        }
+
+        ul li a {
+            background: #34495e;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        ul li a:hover {
+            background: #e74c3c;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .button-container a {
+            background: #34495e;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Bienvenido a Velocity</h1>
+
+        <!-- Mostrar si el usuario no está autenticado -->
+        <div sec:authorize="!isAuthenticated()">
+            <p>Por favor, <a href="/login">inicia sesión</a> o <a href="/register">regístrate</a>.</p>
+        </div>
+
+        <!-- Mostrar si el usuario está autenticado -->
+        <div sec:authorize="isAuthenticated()">
+            <p>Hola, <span sec:authentication="name"></span>!</p>
+            <ul>
+                <li><a href="/registerBike">Registrar Bicicleta</a></li>
+                <li><a href="/myBikes">Ver Mis Bicicletas</a></li>
+                <li th:if="${gestionAlquilerEnabled}"><a href="/gestionAlquiler">Alquilar Bicicleta</a></li>
+                <li th:if="${gestionClubesEnabled}"><a href="/gestionClubes">Gestionar Clubes</a></li>
+                <li th:if="${serviciosTercerosEnabled}"><a href="/serviciosTerceros">Servicios Terceros</a></li>
+                <li th:if="${redSocialEnabled}"><a href="/redSocial">Red Social</a></li>
+                <li th:if="${estadisUsoEnabled}"><a href="/estadisticasUso">Estadísticas de Uso</a></li>
+                <li th:if="${creacionEventosEnabled}"><a href="/crearEvento">Creación de Eventos</a></li>
+                <li th:if="${edicionEventosEnabled}"><a href="/misEventos">Ver y Editar Mis Eventos</a></li>
+                <li th:if="${reportesGobiernoEnabled}"><a href="/reportesGobierno">Reportes para el Gobierno</a></li>
+                <li><a href="/logout">Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
