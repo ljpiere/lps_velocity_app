@@ -1,125 +1,233 @@
-# Proyecto de Línea de Productos de Software en Spring Boot
 
-Este proyecto implementa una línea de productos de software utilizando Spring Boot. La idea es generar diferentes combinaciones de características (“features”) basadas en configuraciones definidas en el archivo `application.properties`. Cada combinación define un producto diferente con su propia funcionalidad. A continuación, se detalla cómo se estructura el proyecto, las características implementadas, y cómo utilizar las funcionalidades actuales.
+# Velocity Full Stack Project
 
-## Características del Proyecto
+Este es el proyecto **Velocity**, una aplicación completa desarrollada con **Spring Boot** y **Angular** que permite la gestión de bicicletas, usuarios, eventos y características adicionales. Velocity está diseñado para ser flexible y escalable, lo que facilita su uso en diferentes tipos de escenarios y clientes, incluyendo productos dirigidos al gobierno para análisis y reportes.
 
-El proyecto tiene las siguientes características (“features”) implementadas:
+## Tabla de Contenidos
+- [Descripción del Proyecto](#descripción-del-proyecto)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Configuración del Archivo `application.properties`](#configuración-del-archivo-applicationproperties)
+- [Requisitos Previos](#requisitos-previos)
+- [Despliegue Local](#despliegue-local)
+- [Despliegue en Azure](#despliegue-en-azure)
+  - [Preparación de la Imagen Docker](#preparación-de-la-imagen-docker)
+  - [Crear una Máquina Virtual en Azure](#crear-una-máquina-virtual-en-azure)
+  - [Configurar la Base de Datos PostgreSQL en Azure](#configurar-la-base-de-datos-postgresql-en-azure)
+- [Cómo Realizar Cambios en la Aplicación](#cómo-realizar-cambios-en-la-aplicación)
+  - [Cambios en el Backend](#cambios-en-el-backend)
+  - [Cambios en el Frontend](#cambios-en-el-frontend)
+- [Cómo Contribuir](#cómo-contribuir)
+- [Licencia](#licencia)
+- [Contacto](#contacto)
 
-1. **Registro de Ciclistas**: Permite registrar ciclistas y sus bicicletas.
-2. **Registro de Bicicletas**: Permite registrar una bicicleta asociada a un usuario.
-3. **Servicios de Terceros**: Permite mostrar servicios de terceros.
-4. **Gestión de Clubes**: Permite que los usuarios se inscriban en un club.
-5. **Gestión de Alquiler de Bicicletas**: Permite que los usuarios alquilen una bicicleta.
+## Descripción del Proyecto
 
-Cada característica se habilita o deshabilita desde el archivo de configuración `application.properties`. Esto permite generar diferentes versiones del producto habilitando o deshabilitando las características según sea necesario.
+Velocity es una aplicación web diseñada para gestionar las actividades relacionadas con bicicletas, usuarios, eventos y características adicionales. Está pensada para diferentes escenarios de uso:
+- **Usuarios Individuales**: Registro de bicicletas y gestión de clubes.
+- **Gobierno**: Reportes detallados sobre el uso de bicicletas y la participación de los usuarios en eventos.
+- **Empresas**: Características adicionales como servicios terceros.
 
-## Configuración en `application.properties`
+### Características Clave
+- **Registro de Usuarios y Bicicletas**.
+- **Alquiler de Bicicletas**.
+- **Gestión de Clubes y Eventos**.
+- **Red Social Simulada** para la interacción entre usuarios.
+- **Reportes para el Gobierno**.
 
-En el archivo `application.properties`, se definen las propiedades que habilitan o deshabilitan las diferentes características. Un ejemplo de configuración es:
+## Estructura del Proyecto
+
+El proyecto está organizado en los siguientes módulos:
+
+### Backend (`src/main/java/com/velocity/back`)
+- **moduloRegistro**: Gestiona el registro de ciclistas, clubes y alquiler de bicicletas.
+- **moduloBicicleta**: Maneja la administración de bicicletas y alquileres.
+- **moduloEstadistica**: Módulo para estadísticas de uso y generación de reportes.
+- **moduloEventos**: Permite la creación y edición de eventos deportivos.
+- **moduloSocial**: Incluye funcionalidades simuladas de red social.
+
+### Frontend (`src/main/resources/templates`)
+- **auth**: Formularios de login y registro de usuarios.
+- **bike**: Registro y gestión de bicicletas.
+- **eventos**: Crear, editar y visualizar eventos.
+- **estadisticas**: Vistas para mostrar estadísticas de uso.
+- **reportes**: Generación de reportes ficticios para el gobierno.
+- **social**: Simulación de red social para usuarios.
+
+### Configuración
+- **`application.properties`**: Configura la base de datos, el servidor, y habilita o deshabilita características.
+- **Dockerfile**: Contiene las instrucciones para empaquetar la aplicación en un contenedor Docker.
+
+## Configuración del Archivo `application.properties`
+
+El archivo `application.properties` permite configurar la aplicación y habilitar/deshabilitar diferentes características.
+
+Ejemplo de configuración:
 
 ```properties
+spring.datasource.url=jdbc:postgresql://<db-host>:5432/arq
+spring.datasource.username=arq
+spring.datasource.password=password
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
 features.registroCiclistas.enabled=true
 features.redSocial.enabled=true
-features.estadisUso.enabled=false
+features.estadisUso.enabled=true
 features.registroBicicleta.enabled=true
 features.serviciosTerceros.enabled=true
 features.gestionClubes.enabled=true
 features.gestionAlquiler.enabled=true
+features.creacionEventos.enabled=true
+features.edicionEventos.enabled=true
+features.reportesGobierno.enabled=true
 ```
 
-Si una característica está establecida en `true`, se habilitará y estará disponible en la aplicación. De lo contrario, estará deshabilitada.
+Cada propiedad `features.<nombre>.enabled` controla si una característica está habilitada o no en la aplicación.
 
-## Arquitectura del Proyecto
+## Requisitos Previos
 
-El proyecto se estructura utilizando las anotaciones de Spring para cargar diferentes beans según la configuración habilitada.
+Antes de iniciar el despliegue, asegúrate de tener instalados los siguientes componentes:
 
-- **@ConditionalOnProperty**: Esta anotación permite habilitar o deshabilitar beans según el valor de una propiedad en el archivo de configuración. Cada clase de servicio tiene esta anotación para que solo se registre como bean si la propiedad correspondiente está habilitada.
+- **Java 19**.
+- **Maven** para la compilación del backend.
+- **Docker** para empaquetar la aplicación.
+- **Azure Account** para el despliegue en la nube.
 
-### Paquetes Principales
+## Despliegue Local
 
-- `com.velocity.back.features.moduloRegistro`:
-  - **RegistroCiclistas**: Registra ciclistas y bicicletas asociadas.
-  - **RegistroBicicleta**: Registra bicicletas individualmente.
-  - **GestionClubes**: Permite la inscripción de usuarios en clubes.
-  - **GestionAlquiler**: Permite a los usuarios alquilar bicicletas.
-- `com.velocity.back.club`:
-  - **Club**: Entidad que representa un club.
-  - **ClubRepository**: Repositorio para realizar operaciones CRUD sobre los clubes.
-- `com.velocity.back.alquiler`:
-  - **Alquiler**: Entidad que representa un registro de alquiler de bicicleta.
-  - **AlquilerRepository**: Repositorio para realizar operaciones CRUD sobre los alquileres.
-- `com.velocity.back.controller`:
-  - **BackController**: Controlador que maneja las solicitudes HTTP y gestiona el registro de usuarios, alquileres y otras características.
+Para desplegar la aplicación localmente:
 
-### Entidades y Repositorios
+1. **Clonar el Repositorio**:
 
-- **User**: Entidad que representa un usuario registrado.
-- **Bike**: Entidad que representa una bicicleta registrada.
-- **Club**: Entidad que representa un club.
-- **Alquiler**: Entidad que representa un alquiler de bicicleta.
+   ```sh
+   git clone https://github.com/tuusuario/velocity.git
+   ```
 
-Los repositorios asociados a estas entidades permiten realizar operaciones CRUD sobre la base de datos H2 embebida.
+2. **Compilar y Ejecutar la Aplicación**:
 
-## Funcionalidades Implementadas
+   ```sh
+   mvn clean package
+   mvn spring-boot:run
+   ```
 
-1. **Registro de Usuarios y Bicicletas**:
-   - A través del formulario en la página principal (`index.html`), se permite registrar un usuario y una bicicleta asociada. Los datos se almacenan en la base de datos H2.
+3. **Acceder a la Aplicación**:
 
-2. **Gestión de Clubes**:
-   - Los usuarios pueden inscribirse en un club proporcionando su ID de usuario y el nombre del club. La inscripción se almacena en la base de datos.
-   - La página HTML `gestionClubes.html` contiene el formulario para la inscripción en un club.
+   Abre tu navegador en `http://localhost:8080`.
 
-3. **Gestión de Alquiler de Bicicletas**:
-   - Los usuarios pueden alquilar una bicicleta proporcionando su ID de usuario y el ID de la bicicleta. El registro del alquiler se almacena en la base de datos.
-   - La página HTML `gestionAlquiler.html` contiene el formulario para alquilar una bicicleta.
+## Despliegue en Azure
 
-## Controlador Principal (`BackController`)
+### Preparación de la Imagen Docker
 
-El controlador principal gestiona las solicitudes HTTP entrantes y redirige a las vistas correspondientes según las acciones solicitadas. Además, el controlador interactúa con los servicios de cada módulo para realizar las acciones de registro, inscripción y alquiler.
+1. **Construir la Imagen**:
 
-### Endpoints Importantes
+   ```sh
+   docker build -t jeanpierec/velocity_full:latest .
+   ```
 
-- `/` - Muestra la página principal con el formulario de registro de usuario y bicicleta.
-- `/gestionClubes` - Muestra la página para inscribirse en un club.
-- `/inscribirClub` - Endpoint para procesar la inscripción de un usuario en un club.
-- `/gestionAlquiler` - Muestra la página para alquilar una bicicleta.
-- `/alquilarBicicleta` - Endpoint para procesar el alquiler de una bicicleta.
+2. **Subir la Imagen a Docker Hub**:
 
-## Base de Datos H2
+   ```sh
+   docker push jeanpierec/velocity_full:latest
+   ```
 
-El proyecto utiliza una base de datos H2 embebida para almacenar los registros de usuarios, bicicletas, clubes y alquileres. La base de datos se configura automáticamente y se puede acceder a través de la consola H2 si está habilitada en la configuración de seguridad.
+### Crear una Máquina Virtual en Azure
 
-Para acceder a la consola de H2, puedes ir a `http://localhost:8080/h2-console` y asegurarte de que la configuración de seguridad permita el acceso.
+1. **Crear la Máquina Virtual**:
 
-## Configuración de Seguridad
+   - Inicia sesión en el [portal de Azure](https://portal.azure.com/).
+   - Crea una máquina virtual Ubuntu y abre el puerto `8080` para acceso público.
 
-Para permitir el acceso sin autenticación, se utiliza un `SecurityConfig` personalizado que deshabilita la seguridad para ciertos endpoints, como la consola de H2, y permite el acceso público a las páginas de inscripción y alquiler.
+2. **Instalar Docker**:
 
-```java
-@Configuration
-public class SecurityConfig {
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/h2-console/**", "/serviciosTerceros", "/gestionClubes", "/inscribirClub", "/gestionAlquiler", "/alquilarBicicleta").permitAll()
-                .anyRequest().permitAll())
-            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
-        return http.build();
-    }
-}
+   Conéctate a la máquina y ejecuta:
+
+   ```sh
+   sudo apt update
+   sudo apt install docker.io -y
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   ```
+
+3. **Ejecutar la Imagen Docker**:
+
+   ```sh
+   docker run -d -p 8080:8080 jeanpierec/velocity_full:latest
+   ```
+
+4. **Abrir el Puerto 8080**:
+
+   Asegúrate de tener configurada una regla de seguridad que permita el tráfico en el puerto `8080`.
+
+### Configurar la Base de Datos PostgreSQL en Azure
+
+- **Azure Database for PostgreSQL** se utilizó para la base de datos.
+- La configuración se realizó en `application.properties` apuntando a la instancia de Azure.
+
+```properties
+spring.datasource.url=jdbc:postgresql://<azure-db-host>:5432/arq
+spring.datasource.username=arq
+spring.datasource.password=password
 ```
 
-Esta configuración permite el acceso sin restricciones a los endpoints mencionados.
+## Cómo Realizar Cambios en la Aplicación
 
-## Cómo Ejecutar el Proyecto
+### Cambios en el Backend
 
-1. **Clonar el Repositorio**: Clona el repositorio en tu máquina local.
-2. **Compilar el Proyecto**: Ejecuta `mvn clean package` para compilar el proyecto y generar el archivo `.jar`.
-3. **Ejecutar la Aplicación**: Ejecuta `java -jar target/back-0.0.1-SNAPSHOT.jar` para iniciar la aplicación.
-4. **Acceder a la Aplicación**: Abre un navegador y ve a `http://localhost:8080` para acceder a la página principal.
+1. **Modificar o Crear Nuevas Clases**:
 
-## Conclusión
-Este proyecto demuestra cómo implementar una línea de productos de software en Spring Boot utilizando configuraciones para habilitar o deshabilitar características específicas. Esto permite generar diferentes versiones del producto de acuerdo a las necesidades del cliente, haciendo el proyecto flexible y escalable.
+   Las clases de negocio se encuentran en `src/main/java/com/velocity/back`. Puedes agregar nuevos controladores, servicios, o repositorios según sea necesario.
 
+2. **Compilar y Verificar**:
+
+   Después de realizar cambios, compila la aplicación:
+
+   ```sh
+   mvn clean package
+   ```
+
+### Cambios en el Frontend
+
+1. **Modificar Archivos HTML**:
+
+   Los archivos HTML se encuentran en `src/main/resources/templates`. Puedes editarlos para ajustar la interfaz de usuario.
+
+2. **Pruebas Locales**:
+
+   Puedes probar la aplicación localmente ejecutándola con:
+
+   ```sh
+   mvn spring-boot:run
+   ```
+
+## Cómo Contribuir
+
+1. **Clonar el Repositorio**:
+
+   ```sh
+   git clone https://github.com/tuusuario/velocity.git
+   ```
+
+2. **Crear una Nueva Rama**:
+
+   ```sh
+   git checkout -b feature/nueva-feature
+   ```
+
+3. **Hacer Commit de los Cambios**:
+
+   ```sh
+   git add .
+   git commit -m "Añadir nueva característica [nombre]"
+   ```
+
+4. **Enviar los Cambios al Repositorio**:
+
+   ```sh
+   git push origin feature/nueva-feature
+   ```
+
+5. **Crear un Pull Request** en GitHub para revisión.
+
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT. Puedes consultar más detalles en el archivo `LICENSE`.
